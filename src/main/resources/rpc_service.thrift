@@ -1,4 +1,4 @@
-namespace java org.jigsaw.payment.rpc
+namespace java org.cocolian.rpc
 
 
 /**

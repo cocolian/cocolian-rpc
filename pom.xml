@@ -184,17 +184,6 @@
 					</execution>
 				</executions>
 			</plugin>
-			<!-- 以下用来生成docker image的插件，供参考。 <plugin> <groupId>io.fabric8</groupId> 
-				<artifactId>docker-maven-plugin</artifactId> <version>0.20.0</version> <extensions>true</extensions> 
-				<configuration> <dockerHost>tcp://localhost:2375</dockerHost> <images> <image> 
-				<name>docker.lixf.cn/${project.artifactId}</name> <alias>${project.artifactId}</alias> 
-				<build> <dockerFileDir>${project.basedir}/src/main/docker</dockerFileDir> 
-				<tags> <tag>latest</tag> <tag>${project.version}</tag> </tags> </build> <run> 
-				<namingStrategy>alias</namingStrategy> <privileged>true</privileged> </run> 
-				</image> </images> </configuration> <executions> <execution> <id>build-docker-image</id> 
-				<phase>install</phase> <goals> <goal>build</goal> </goals> </execution> <execution> 
-				<id>push-docker-image-to-registry</id> <phase>deploy</phase> <goals> <goal>push</goal> 
-				</goals> </execution> </executions> </plugin> -->
 		</plugins>
 	</build>
 </project>
