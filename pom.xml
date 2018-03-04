@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.cocolian</groupId>
+	<version>1.0.0</version>
+	<artifactId>cocolian-thrift-protobuf</artifactId>
+	<packaging>jar</packaging>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<java.version>1.7</java.version>
+		<curator.version>2.10.0</curator.version>
+		<thrift.version>0.10.0</thrift.version>
+		<protobuf.version>3.5.0</protobuf.version>
+		<protobuf-java-format.version>1.2</protobuf-java-format.version>
+		<jackson.version>2.9.0</jackson.version>
+		<commons-beanutils.version>1.9.3</commons-beanutils.version>
+		<spring.version>4.3.10.RELEASE</spring.version>
+		<spring-boot.version>1.5.6.RELEASE</spring-boot.version>
+		<thrift.path>thrift</thrift.path>
+		<idl.folder>${basedir}/src/main/resources</idl.folder>
+		<sonar.exclusions>src/main/gen/**/*,src/test/gen/**/*</sonar.exclusions>
+	</properties>
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-tx</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-beanutils</groupId>
+			<artifactId>commons-beanutils</artifactId>
+			<version>${commons-beanutils.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.5</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.protobuf</groupId>
+			<artifactId>protobuf-java</artifactId>
+			<version>${protobuf.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-beans</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-pool2</artifactId>
+			<version>2.4.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.curator</groupId>
+			<artifactId>curator-framework</artifactId>
+			<version>${curator.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.curator</groupId>
+			<artifactId>curator-recipes</artifactId>
+			<version>${curator.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.curator</groupId>
+			<artifactId>curator-client</artifactId>
+			<version>${curator.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.curator</groupId>
+			<artifactId>curator-x-discovery</artifactId>
+			<version>${curator.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.thrift</groupId>
+			<artifactId>libthrift</artifactId>
+			<version>${thrift.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>${jackson.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-core</artifactId>
+			<version>${jackson.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-annotations</artifactId>
+			<version>${jackson.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.module</groupId>
+			<artifactId>jackson-module-jaxb-annotations</artifactId>
+			<version>${jackson.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-autoconfigure</artifactId>
+			<version>${spring-boot.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.googlecode.protobuf-java-format/protobuf-java-format -->
+		<dependency>
+			<groupId>com.googlecode.protobuf-java-format</groupId>
+			<artifactId>protobuf-java-format</artifactId>
+			<version>1.2</version>
+		</dependency>
+
+	</dependencies>
+	<build>
+		<finalName>${project.artifactId}</finalName>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.1</version>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+					<encoding>UTF-8</encoding><!-- 指定编码格式，否则在DOS下运行mvn compile命令时会出现莫名的错误，因为系统默认使用GBK编码 -->
+				</configuration>
+			</plugin>
+			<!-- 使用protobuf 和thrift来编译文件生成java代码。 生成的代码在src/main/gen目录下 -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>generate-sources</id>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<phase>generate-sources</phase>
+						<configuration>
+							<tasks>
+								<echo>Delete folder : ${basedir}/src/main/gen</echo>
+								<delete dir="${basedir}/src/main/gen" quiet="true" />
+								<echo>Create folder : ${basedir}/src/main/gen</echo>
+								<mkdir dir="${basedir}/src/main/gen" />
+								<!-- Compile thrift files in all locations -->
+								<echo>Compiling **/*.thrift files...</echo>
+								<apply executable="${thrift.path}">
+									<arg value="--gen" />
+									<arg value="java" />
+									<arg value="-out" />
+									<arg value="${basedir}/src/main/gen" />
+									<fileset dir="${idl.folder}" includes="**/*.thrift" />
+								</apply>
+
+							</tasks>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>add-source</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>add-source</goal>
+						</goals>
+						<configuration>
+							<sources>
+								<source>src/main/gen</source>
+							</sources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<!-- 以下用来生成docker image的插件，供参考。 <plugin> <groupId>io.fabric8</groupId> 
+				<artifactId>docker-maven-plugin</artifactId> <version>0.20.0</version> <extensions>true</extensions> 
+				<configuration> <dockerHost>tcp://localhost:2375</dockerHost> <images> <image> 
+				<name>docker.lixf.cn/${project.artifactId}</name> <alias>${project.artifactId}</alias> 
+				<build> <dockerFileDir>${project.basedir}/src/main/docker</dockerFileDir> 
+				<tags> <tag>latest</tag> <tag>${project.version}</tag> </tags> </build> <run> 
+				<namingStrategy>alias</namingStrategy> <privileged>true</privileged> </run> 
+				</image> </images> </configuration> <executions> <execution> <id>build-docker-image</id> 
+				<phase>install</phase> <goals> <goal>build</goal> </goals> </execution> <execution> 
+				<id>push-docker-image-to-registry</id> <phase>deploy</phase> <goals> <goal>push</goal> 
+				</goals> </execution> </executions> </plugin> -->
+		</plugins>
+	</build>
+</project>
