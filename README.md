@@ -1,6 +1,6 @@
 ## 一、功能
 
-jigsaw-thrift-protobuf模块是jigsaw项目的RPC容器和客户端连接池的实现。目前由于这两个功能耦合度较高，都放在一个项目中实现。
+cocolian-thrift-protobuf是一个RPC容器和客户端连接池的实现。目前由于这两个功能耦合度较高，都放在一个项目中实现。
 
 RPC容器，支持：
 1. 服务注册： 这个版本是注册到zookeeper上，之后会提供对consul的支持。
@@ -26,7 +26,7 @@ RPC容器，支持：
      ├── src/main
      │    ├── gen                       # 由rpc_service.thrift自动编译出来的代码
      │    │    └── ..  
-     │    ├── org/jigsaw/payment/rpc
+     │    ├── org/cocolian/rpc
      │    │    ├── register            # 服务注册
      │    │    ├── server              # 服务器端的实现框架
      │    │    └── sharder             # 客户端的rpc连接池   
@@ -35,7 +35,7 @@ RPC容器，支持：
      │          │     └── srping.factories  
      │          └── rpc_service.thrif
      ├── CHANGELOG.md
-     ├── jigsaw-thrift-protobuf.iml
+     ├── cocolian-thrift-protobuf.iml
      ├── pom.xm
      └── README.md
 
@@ -58,21 +58,3 @@ TODO：
 1. 进一步优化base image， 删除不必要的模块。 
 2. 增加监控和日志收集组件。
 
-
-
-## TODO
-
-|No.|功能|负责人|github 账号|
-|---------|---------|---------|---------|
-|1|需要支持consul作为服务注册中心|梁燕东|liangyd1024|
-|2|server注册到注册中心时，需要申明自己的能力，也就是可以承受的QPS|泽西||
-|3|支持json/http访问内部服务|杜雷|Tony-dulei|
-|4|追加失败策|yifeng|yifeng0898|
-|5|Mock返回功能server|待定||
-|6|支持按照服务器端的能力进行分片访问|待定||
-
-
-## Finished
-
-1. 使用zookeeper作为服务注册中心。
-2. 支持简单的轮询式分片访问。
