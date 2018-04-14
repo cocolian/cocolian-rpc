@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.cocolian</groupId>
 		<artifactId>cocolian-parent</artifactId>
-		<version>1.0.0-SNAPSHOT</version>
+		<version>1.0.0</version>
 	</parent>	
 	<artifactId>cocolian-thrift-protobuf</artifactId>
 	<packaging>jar</packaging>
@@ -115,13 +115,12 @@
 			<version>${spring-boot.version}</version>
 			<scope>provided</scope>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/com.googlecode.protobuf-java-format/protobuf-java-format -->
+
 		<dependency>
 			<groupId>com.googlecode.protobuf-java-format</groupId>
 			<artifactId>protobuf-java-format</artifactId>
 			<version>1.2</version>
 		</dependency>
-
 	</dependencies>
 	<build>
 		<plugins>
@@ -177,4 +176,22 @@
 			</plugin>
 		</plugins>
 	</build>
+	<developers>
+		<developer>
+			<id>shamphone</id>
+			<name>凤凰牌老熊</name>
+			<email>shamphone@gmail.com</email>
+			<organization>Cocolian Software, Inc.</organization>
+			<organizationUrl>http://www.cocolian.com</organizationUrl>
+			<roles>
+				<role>Project Leader</role>
+			</roles>
+		</developer>
+	</developers>
+	<scm>
+		<url>https://github.com/cocolian/cocolian-thrift-protobuf</url>
+		<connection>scm:git:ssh://git@github.com:cocolian/cocolian-thrift-protobuf.git</connection>
+		<developerConnection>scm:git:ssh://git@github.com:cocolian/cocolian-thrift-protobuf.git</developerConnection>
+		<tag>HEAD</tag>
+	</scm>	
 </project>
