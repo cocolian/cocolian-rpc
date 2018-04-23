@@ -48,10 +48,10 @@ service BaseService {
 
 和rpc-server相对应的客户端实现， 主要是提供一个Transport连接池，这是基于Apache Commons Pools实现的RPC 连接池。 
      ├── TransportManager 连接池接口  
-          └── PooledTransport： 基于Apache Commons Pools 的连接池声明   
-			   └── AbstractTransportPool 实现基本的连接池接口   
-					└──RefreshableTransportPool 支持按照一定的策略来更新链接的连接池   
-						 └──BasicTransportPool 最基本的round-robin轮询方式的可更新的链接池，即按照zk上注册的顺序，依次选择服务器。    
+           └── PooledTransport： 基于Apache Commons Pools 的连接池声明   
+                 └── AbstractTransportPool 实现基本的连接池接口   
+                          └──RefreshableTransportPool 支持按照一定的策略来更新链接的连接池   
+                                    └──BasicTransportPool 最基本的round-robin轮询方式的可更新的链接池，即按照zk上注册的顺序，依次选择服务器。    
 
 ## 四、cocolian-rpc-docker
 
