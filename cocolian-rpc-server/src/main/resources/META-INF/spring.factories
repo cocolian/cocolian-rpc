@@ -1,2 +1,2 @@
 # Auto Configure
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=org.jigsaw.payment.rpc.server.RpcServerConfiguration
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=org.cocolian.rpc.server.RpcServerConfiguration
