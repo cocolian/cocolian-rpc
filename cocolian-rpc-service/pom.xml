@@ -31,7 +31,7 @@
 						</goals>
 						<phase>generate-sources</phase>
 						<configuration>
-							<tasks>
+							<target>
 								<echo>Delete folder : ${basedir}/src/main/gen</echo>
 								<delete dir="${basedir}/src/main/gen" quiet="true" />
 								<echo>Create folder : ${basedir}/src/main/gen</echo>
@@ -45,8 +45,7 @@
 									<arg value="${basedir}/src/main/gen" />
 									<fileset dir="${idl.folder}" includes="**/*.thrift" />
 								</apply>
-
-							</tasks>
+							</target>
 						</configuration>
 					</execution>
 				</executions>
