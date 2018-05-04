@@ -29,7 +29,7 @@ public class IpPortResolver {
      * 获取机器上可用的ipv4地址.
      * Note: 1 当有多个符合条件的ip地址时,只返回第一个ip地址
      *       2 192.168的地址会被过滤,不回返回
-     * @return
+     * @return ip
      */
     public String getIpV4Address() {
         String ip = null;
@@ -72,7 +72,7 @@ public class IpPortResolver {
      * 判断指定的端口是否可用,并返回可用的端口
      * @param ip
      * @param port
-     * @return
+     * @return availablePort
      */
     public int getAvailablePort(String ip, int port) {
         int availablePort = port;

@@ -38,7 +38,7 @@ public class ServerRunner {
 		 * 在server完全启动后注册到zookeeper上的时间间隔，毫秒为单位
 		 * 
 		 * @param milliseconds
-		 * @return
+		 * @return builder
 		 */
 		public Builder zookeeperDeferRegisterPeriod(int milliseconds) {
 			this.zookeeperDeferRegisterPeriod = milliseconds;
@@ -49,7 +49,7 @@ public class ServerRunner {
 		 * 在server关闭提前从zookeeper上注销
 		 * 
 		 * @param milliseconds
-		 * @return
+		 * @return builder
 		 */
 		public Builder zookeeperUnregisterPeriod(int milliseconds) {
 			this.zookeeperUnregisterPeriod = milliseconds;

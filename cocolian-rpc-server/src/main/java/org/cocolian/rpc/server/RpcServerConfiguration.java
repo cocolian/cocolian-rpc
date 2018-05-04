@@ -147,7 +147,7 @@ public class RpcServerConfiguration {
 
 	/**
 	 * 这个bean启动后会独占线程，导致其他的bean无法执行。所以必须保证这个bean在最后才能够执行。
-	 * @return
+	 * @return ServerRunner
 	 * @throws Exception
 	 */
 	@Bean(initMethod = "start", destroyMethod = "stop")
