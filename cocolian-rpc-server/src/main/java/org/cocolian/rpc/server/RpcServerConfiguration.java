@@ -29,6 +29,8 @@ import org.apache.zookeeper.data.ACL;
 import org.cocolian.rpc.register.DigestAuthInfo;
 import org.cocolian.rpc.register.JsonSerializer;
 import org.cocolian.rpc.register.RpcPayload;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.context.annotation.Bean;
@@ -45,7 +47,7 @@ import org.springframework.core.Ordered;
 @Configuration
 @AutoConfigureOrder(Ordered.LOWEST_PRECEDENCE)
 public class RpcServerConfiguration {
-
+	private static final Logger LOG = LoggerFactory.getLogger(RpcServerConfiguration.class);
 	@Value("${rpc.server.service.path}")
 	private String zkBasePath;
 
@@ -102,14 +104,12 @@ public class RpcServerConfiguration {
 
 	@Value("${rpc.server.uri.spec}")
 	private String uriSpec = "";
-	
+
 	@Value("${rpc.server.zookeeper.register.delay:2000}")
 	private int zookeeperDeferRegisterPeriod = 2000;
-	
+
 	@Value("${rpc.server.zookeeper.unregister.before:5000}")
 	private int zookeeperUnregisterPeriod = 5000;
-
-	
 
 	private RpcPayload payload() {
 		RpcPayload payload = new RpcPayload();
@@ -140,32 +140,31 @@ public class RpcServerConfiguration {
 	}
 
 	private RetryPolicy retryPolicy() {
-		return new BoundedExponentialBackoffRetry(baseSleepTimeMs,
-				maxSleepTimeMs, maxRetries);
+		return new BoundedExponentialBackoffRetry(baseSleepTimeMs, maxSleepTimeMs, maxRetries);
 	}
-
+	
+	@Bean
+	public TProcessor probufProcessor(){
+		return new TProtobufProcessor();
+	}
 
 	/**
 	 * 这个bean启动后会独占线程，导致其他的bean无法执行。所以必须保证这个bean在最后才能够执行。
+	 * 
 	 * @return
 	 * @throws Exception
 	 */
 	@Bean(initMethod = "start", destroyMethod = "stop")
-	public ServerRunner serverRunner()
-			throws Exception {
-		String ip = this.ip;
-		if (ip == null)
-			ip = new IpPortResolver().getIpV4Address();
+	public ServerRunner serverRunner() throws Exception {
+		String realIp = this.ip;
+		if (realIp == null)
+			realIp = new IpPortResolver().getIpV4Address();
 
-		String instanceId = this.ip + ":" + this.port;
-		
-		CuratorFramework curatorFramework =CuratorFrameworkFactory.builder()
-				.connectString(this.connectString)
-				.sessionTimeoutMs(this.sessionTimeoutMs)
-				.connectionTimeoutMs(this.connectionTimeoutMs)
-				.retryPolicy(this.retryPolicy())
-				.aclProvider(this.aclProvider()).authorization(this.authInfo())
-				.build();
+		String instanceId = realIp + ":" + this.port;
+
+		CuratorFramework curatorFramework = CuratorFrameworkFactory.builder().connectString(this.connectString)
+				.sessionTimeoutMs(this.sessionTimeoutMs).connectionTimeoutMs(this.connectionTimeoutMs)
+				.retryPolicy(this.retryPolicy()).aclProvider(this.aclProvider()).authorization(this.authInfo()).build();
 		InstanceSerializer<RpcPayload> serializer = new JsonSerializer();
 
 		TServerTransport transport = new TServerSocket(this.port);
@@ -173,31 +172,22 @@ public class RpcServerConfiguration {
 		TThreadPoolServer.Args args = new TThreadPoolServer.Args(transport);
 		args.transportFactory(new TTransportFactory());
 		args.protocolFactory(new TBinaryProtocol.Factory());
+		args.processor(probufProcessor());
 
-		TProcessor processor= new TProtobufProcessor();		
-		args.processor(processor);
-		
-		args.executorService(new ThreadPoolExecutor(this.minTheads,
-				this.maxTheads, this.keepAliveTime, TimeUnit.SECONDS,
-				new SynchronousQueue<Runnable>()));
+		args.executorService(new ThreadPoolExecutor(this.minTheads, this.maxTheads, this.keepAliveTime,
+				TimeUnit.SECONDS, new SynchronousQueue<Runnable>()));
 
 		TServer server = new TThreadPoolServer(args);
 
-		ServiceInstanceBuilder<RpcPayload> instanceBuilder = ServiceInstance
-				.builder();
-		instanceBuilder.name(this.serviceName)
-				.uriSpec(new UriSpec(this.uriSpec)).payload(this.payload())
-				.port(port).id(instanceId).address(ip);
+		ServiceInstanceBuilder<RpcPayload> instanceBuilder = ServiceInstance.builder();
+		instanceBuilder.name(this.serviceName).uriSpec(new UriSpec(this.uriSpec)).payload(this.payload()).port(port)
+				.id(instanceId).address(realIp);
 
-		ServiceDiscoveryBuilder<RpcPayload> discoveryBuilder = ServiceDiscoveryBuilder
-				.builder(RpcPayload.class);
-		discoveryBuilder.client(curatorFramework).basePath(zkBasePath)
-				.serializer(serializer).thisInstance(instanceBuilder.build())
-				.build();
-		return ServerRunner
-				.newBuilder()
-				.server(server)
-				.curatorFramework(curatorFramework)
+		ServiceDiscoveryBuilder<RpcPayload> discoveryBuilder = ServiceDiscoveryBuilder.builder(RpcPayload.class);
+		discoveryBuilder.client(curatorFramework).basePath(zkBasePath).serializer(serializer)
+				.thisInstance(instanceBuilder.build()).build();
+		LOG.info("server info: ip={};port={};serviceName={};instanceId={}", realIp, port, serviceName, instanceId);
+		return ServerRunner.newBuilder().server(server).curatorFramework(curatorFramework)
 				.serviceDiscovery(discoveryBuilder.build())
 				.zookeeperDeferRegisterPeriod(this.zookeeperDeferRegisterPeriod)
 				.zookeeperUnregisterPeriod(this.zookeeperUnregisterPeriod).build();

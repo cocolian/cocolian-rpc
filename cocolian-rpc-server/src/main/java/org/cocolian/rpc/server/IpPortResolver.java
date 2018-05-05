@@ -65,6 +65,8 @@ public class IpPortResolver {
             LOG.error("Failed to get ip", e);
         }
 
+        if(ip == null)
+        	ip = "127.0.0.1";
         return ip;
     }
 

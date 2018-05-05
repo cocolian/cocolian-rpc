@@ -132,7 +132,7 @@ public abstract class RefreshableTransportPool extends AbstractTransportPool
         //this.prepareInstances();
         // call super to initialize the pool;
         super.start();
-        LOG.info("transport pooling factory started. ");
+        LOG.info("transport pooling factory started, path={} ", path);
     }
 
 
@@ -161,12 +161,12 @@ public abstract class RefreshableTransportPool extends AbstractTransportPool
             LOG.debug("initailize the service instance list from zookeeper.");
             break;
         case CHILD_ADDED:
-            LOG.debug("add new service instance from zookeeper.");
             this.addChild(event.getData());
+            LOG.debug("add new service instance from zookeeper, path = {}", event.getData().getPath());
             break;
         case CHILD_UPDATED:
-            LOG.debug("update service instance  from zookeeper.");
             this.addChild(event.getData());
+            LOG.debug("update service instance  from zookeeper, path = {}", event.getData().getPath());
             break;
         case CONNECTION_RECONNECTED:
             this.cache.rebuild();
@@ -174,13 +174,13 @@ public abstract class RefreshableTransportPool extends AbstractTransportPool
         case CHILD_REMOVED:
         case CONNECTION_SUSPENDED:
         case CONNECTION_LOST:
-            LOG.debug("remove service instance  from zookeeper.");
             this.removeChild(event.getData());
+            LOG.debug("remove service instance  from zookeeper, path = {}", event.getData().getPath());
             break;
         default:
-            LOG.debug("Ignore PathChildrenCache event : {path:"
-                    + event.getData().getPath() + " data:"
-                    + new String(event.getData().getData()) + "}");
+            LOG.debug("Ignore PathChildrenCache event, path={}, data={}",
+                    event.getData().getPath(),
+                    new String(event.getData().getData()));
         }
     }
 

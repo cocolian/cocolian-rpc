@@ -11,7 +11,7 @@
 	<packaging>pom</packaging>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<curator.version>2.10.0</curator.version>
+		<curator.version>2.12.0</curator.version>
 		<thrift.version>0.10.0</thrift.version>
 		<protobuf.version>3.5.0</protobuf.version>
 		<protobuf-java-format.version>1.2</protobuf-java-format.version>
