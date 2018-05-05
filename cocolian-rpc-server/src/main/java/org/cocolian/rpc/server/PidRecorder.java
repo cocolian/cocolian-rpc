@@ -20,7 +20,7 @@ public class PidRecorder {
 	/**
 	 * Get pid.
 	 * 
-	 * @return
+	 * @return pid
 	 */
 	public Long getPID() {
 		String processName = ManagementFactory.getRuntimeMXBean().getName();
@@ -76,7 +76,7 @@ public class PidRecorder {
 	 * Write pid to pid file.
 	 * 
 	 * @param pidFile
-	 * @return
+	 * @return boolean
 	 */
 	public boolean writePidToFile(String pidFile) {
 		FileWriter pidFileWriter = null;
