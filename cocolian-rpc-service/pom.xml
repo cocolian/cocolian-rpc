@@ -11,8 +11,6 @@
 	<packaging>jar</packaging>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<thrift.path>thrift</thrift.path>
-		<idl.folder>${basedir}/src/main/resources</idl.folder>
 		<sonar.exclusions>src/main/gen/**/*,src/test/gen/**/*</sonar.exclusions>
 	</properties>
 	<dependencies>
@@ -20,36 +18,7 @@
 	<build>
 		<plugins>
 			<!-- 使用protobuf 和thrift来编译文件生成java代码。 生成的代码在src/main/gen目录下 -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-antrun-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>generate-sources</id>
-						<goals>
-							<goal>run</goal>
-						</goals>
-						<phase>generate-sources</phase>
-						<configuration>
-							<target>
-								<echo>Delete folder : ${basedir}/src/main/gen</echo>
-								<delete dir="${basedir}/src/main/gen" quiet="true" />
-								<echo>Create folder : ${basedir}/src/main/gen</echo>
-								<mkdir dir="${basedir}/src/main/gen" />
-								<!-- Compile thrift files in all locations -->
-								<echo>Compiling **/*.thrift files...</echo>
-								<apply executable="${thrift.path}">
-									<arg value="--gen" />
-									<arg value="java" />
-									<arg value="-out" />
-									<arg value="${basedir}/src/main/gen" />
-									<fileset dir="${idl.folder}" includes="**/*.thrift" />
-								</apply>
-							</target>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
+			
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>build-helper-maven-plugin</artifactId>

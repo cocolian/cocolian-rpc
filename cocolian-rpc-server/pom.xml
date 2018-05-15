@@ -11,9 +11,6 @@
 	<packaging>jar</packaging>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<thrift.path>thrift</thrift.path>
-		<idl.folder>${basedir}/src/main/resources</idl.folder>
-		<sonar.exclusions>src/main/gen/**/*,src/test/gen/**/*</sonar.exclusions>
 	</properties>
 	<dependencies>
 		<dependency>

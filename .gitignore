@@ -20,7 +20,6 @@ classes/
 buildSrc/build
 /spring-*/build
 /src/asciidoc/build
-/src/main/gen
 target/
 jdk1.8.0_152/
 
