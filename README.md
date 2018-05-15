@@ -65,4 +65,20 @@ service BaseService {
 TODO： 
 1. 进一步优化base image， 删除不必要的模块。 
 2. 增加监控和日志收集组件。
-3. 
+## cocolian-id 的启动
+###执行流程
+ - 更新代码，如果使用的是从库，更新代码请使用`git fetch upstream`，详情请参考：http://wiki.cocolian.org/display/COC/3.2+GitHub+Pull-Request
+ - 启动zookeeper, 使用`zkServer start` ，详情请参考：https://blog.csdn.net/u014534808/article/details/80293141
+ - 打包构建
+ 转到cocolian-id目录下执行`mvn clean install -Dmaven.test.skip=true`
+ - 执行start.sh 文件
+  打包成功之后转到 cocolian-id-generator 目录执行`/target/bin` 下的start.sh 文件
+ - 跑TestIdService测试用例
+### 错误以及处理办法
+ - 执行./start.sh 报错`-bash: ./start.sh: Permission denied`
+ 权限不足，处理办法  `chmod 777 start.sh`
+ - 执行./start.sh报错` org.cocolian.data.server.DataServer  
+错误: 找不到或无法加载主类 org.cocolian.data.server.DataServer`
+或者`错误: 找不到或无法加载主类 org.cocolian.id.server.IdServer`
+解决办法：修改MAIN_CLASS为：`MAIN_CLASS="org.cocolian.id.server.IdServer"`
+增加`JAR_LIB="$WORKING_DIR/${project.build.finalName}.jar"` 配置
