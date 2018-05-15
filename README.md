@@ -65,6 +65,18 @@ service BaseService {
 TODO： 
 1. 进一步优化base image， 删除不必要的模块。 
 2. 增加监控和日志收集组件。
-3. 
-#youqiang.zhao
-> tangzy commit test!!
+
+## 四、开发指南
+
+### 1. 执行流程
+ - 更新代码，如果使用的是从库，更新代码请使用`git fetch upstream`，详情请参考：[Cocolian Wiki: GitHub Pull Request指南](http://wiki.cocolian.org/display/COC/3.2+GitHub+Pull-Request)
+ - 启动zookeeper, 使用`zkServer start` ，详情请参考：[Apache Zookeeper安装指南](http://wiki.cocolian.org/pages/viewpage.action?pageId=65929)
+ - 打包构建
+ 转到cocolian-id目录下执行`mvn clean install -DskipTests=true`
+ - 执行start.sh 文件
+  打包成功之后转到 cocolian-id-generator 目录执行`/target/bin` 下的start.sh 文件， 启动id server
+ - 运行TestIdService测试用例， 确认所有测试通过 
+### 2. 错误以及处理办法
+ - 执行./start.sh 报错`-bash: ./start.sh: Permission denied`
+ 权限不足，处理办法  `chmod 777 start.sh`， 或者`bash start.sh`
+ 
