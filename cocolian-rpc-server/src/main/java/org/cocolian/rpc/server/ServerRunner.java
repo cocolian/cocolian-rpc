@@ -115,6 +115,8 @@ public class ServerRunner {
 							.sleep(builder.zookeeperDeferRegisterPeriod);
 
 				} catch (InterruptedException e) {
+					LOG.warn("Interrupted!", e);
+					Thread.currentThread().interrupt();
 					return;
 
 				}

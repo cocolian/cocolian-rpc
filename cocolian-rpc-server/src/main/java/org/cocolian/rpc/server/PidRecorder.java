@@ -89,10 +89,11 @@ public class PidRecorder {
 			return false;
 		} finally {
 			try {
-				pidFileWriter.close();
+				if (pidFileWriter != null) {
+					pidFileWriter.close();
+				}
 			} catch (IOException e) {
 				LOG.error(e.getMessage());
-				return false;
 			}
 		}
 		return true;
