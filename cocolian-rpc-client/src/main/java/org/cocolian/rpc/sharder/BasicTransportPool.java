@@ -155,6 +155,7 @@ public class BasicTransportPool extends RefreshableTransportPool {
             }
             LOG.trace("Using service instance: " + instance);
         } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
             throw new PooledException("Error while get instance.", e);
         }
         return instance;

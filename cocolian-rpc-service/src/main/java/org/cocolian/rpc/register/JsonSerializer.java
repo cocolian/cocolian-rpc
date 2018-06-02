@@ -55,6 +55,9 @@ public class JsonSerializer implements InstanceSerializer<RpcPayload> {
 		String source = new String(bytes);
 
 		Map<String, Object> map = this.fromJson(source, Map.class);
+		if (map == null) {
+			return null;
+		}
 
 		builder.id(Objects.toString(map.get("id"), ""));
 		builder.address(Objects.toString(map.get("address"), null));

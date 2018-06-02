@@ -101,8 +101,15 @@ public class IpPortResolver {
     private boolean isPortAvailable(String ip, int port) {
         boolean isOk = true;
 
-        Socket socket = new Socket();
+        Socket socket=null;
         try {
+        try {
+            socket = new Socket();
+        } finally {
+            if (socket != null) {
+                socket.close();
+            }
+        }
             socket.bind(new InetSocketAddress(ip, port));
             socket.close();
         } catch (IOException e) {
